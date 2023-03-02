@@ -23,4 +23,22 @@ class Note < ApplicationRecord
   belongs_to :user
   has_many :note_hashtags
   has_many :hashtags, through: :note_hashtags
+
+  def self.order_by_first_hashtag(user_id, direction)
+
+    subquery = Note.joins(:hashtags)
+                   .where(user_id:)
+                   .select("notes.id, #{direction == 'asc' ? 'MIN' : 'MAX'}(hashtags.id) AS first_hashtag")
+                   .group('notes.id')
+                   .to_sql
+
+    p subquery
+
+    joins("INNER JOIN (#{subquery}) sub ON sub.id = notes.id")
+      .order("sub.first_hashtag #{direction.upcase}")
+  end
+
+  def self.get_by_user_ordered_by_field(user_id, field, direction = 'asc')
+    where(user_id:).order("#{field} #{direction.upcase}")
+  end
 end

@@ -2,10 +2,24 @@
 
 class NotesController < ApplicationController
   before_action :set_current_user
+  before_action :set_sort_direction, only: %i[sort]
   before_action :set_note, only: %i[edit update destroy]
 
   def index
-    @notes = @user.nil? ? Note.all : @user.notes
+    @notes = Note.all and return if @user.nil?
+
+    if @user.config['field'] == 'hashtag'
+      @notes = Note.order_by_first_hashtag @user.id, @user.config['direction']
+      return
+    end
+    @notes = Note.get_by_user_ordered_by_field @user.id, @user.config['field'], @user.config['direction']
+  end
+
+  def sort
+    respond_to do |format|
+      format.html { redirect_to notes_url }
+      format.json { render :index, status: :ok, location: @note }
+    end
   end
 
   def new
@@ -72,6 +86,16 @@ class NotesController < ApplicationController
     end
 
     @user = User.find(session[:current_user_id])
+  end
+
+  def set_sort_direction
+    if @user.config['field'] == params[:field]
+      @user.config['direction'] = @user.config['direction'] == 'asc' ? 'desc' : 'asc'
+    else
+      @user.config['field'] = params[:field]
+      @user.config['direction'] = 'asc'
+    end
+    @user.save
   end
 
   def note_params

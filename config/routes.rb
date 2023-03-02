@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   end
 
   resources :notes, except: %i[show]
+  get 'notes/sort/:field' => 'notes#sort', as: 'sort_notes'
 end
