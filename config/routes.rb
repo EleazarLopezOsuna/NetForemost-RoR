@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'pages/authentication'
-  root to: 'pages#authentication'
+
+  root to: 'authentication/sessions#new'
+
+  namespace :authentication, path: '', as: '' do
+    resources :users, only: %i[new create]
+    resources :sessions, only: %i[new create]
+  end
 end
