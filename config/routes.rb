@@ -9,5 +9,5 @@ Rails.application.routes.draw do
     resources :sessions, only: %i[new create]
   end
 
-  resources :notes
+  resources :notes, except: %i[show]
 end

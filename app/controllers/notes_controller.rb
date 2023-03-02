@@ -2,13 +2,11 @@
 
 class NotesController < ApplicationController
   before_action :set_current_user
-  before_action :set_note, only: %i[show edit update destroy]
+  before_action :set_note, only: %i[edit update destroy]
 
   def index
     @notes = @user.nil? ? Note.all : @user.notes
   end
-
-  def show; end
 
   def new
     @note = Note.new
@@ -23,8 +21,9 @@ class NotesController < ApplicationController
       if @note.save
         flash[:success] = 'Note was successfully created.'
         format.html { redirect_to note_url(@note) }
-        format.json { render :show, status: :created, location: @note }
+        format.json { render :index, status: :created, location: @note }
       else
+        flash[:danger] = 'Note could not be created.'
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end
@@ -35,9 +34,10 @@ class NotesController < ApplicationController
     respond_to do |format|
       if @note.update(note_params)
         flash[:success] = 'Note was successfully updated.'
-        format.html { redirect_to note_url(@note) }
-        format.json { render :show, status: :ok, location: @note }
+        format.html { redirect_to notes_url }
+        format.json { render :index, status: :ok, location: @note }
       else
+        flash[:danger] = 'Note could not be updated.'
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end

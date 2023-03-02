@@ -1,6 +1,0 @@
-<p><strong>Title: </strong><%= @note.title %></p>
-<p><strong>Body: </strong><%= @note.body %></p>
-<p><strong>Creation date: </strong><%= @note.created_at.to_date  %></p>
-<p><strong>Hashtags: </strong>
-  <%= @note.hashtags.map { |hashtag| hashtag.name }.join(', ') %>
-</p>

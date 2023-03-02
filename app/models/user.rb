@@ -20,11 +20,18 @@ class User < ApplicationRecord
                       message: :invalid
                     }
   validates :name, presence: true
-  validates :password, length: { minimum: 6 }
+  validate :password_check
 
   before_save :downcase_attributes
 
   private
+
+  def password_check
+    return if password.nil?
+    return if password.size > 5 && (user.new_record? || password.changed?)
+
+    errors.add :password, 'Must have at least 6 characters'
+  end
 
   def downcase_attributes
     self.email = email.downcase
