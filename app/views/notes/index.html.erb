@@ -1,0 +1,19 @@
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Creation date</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @notes.each do |note| %>
+    <tr>
+      <td><%= note.title %></td>
+      <td><%= note.created_at.to_date %></td>
+      <td><%= button_to 'Show', note_path(note), method: :get %></td>
+      <td><%= button_to 'Delete', note_path(note), method: :delete %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

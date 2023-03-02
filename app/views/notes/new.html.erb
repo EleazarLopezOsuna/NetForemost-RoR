@@ -1,0 +1,22 @@
+<%= form_with scope: :note, url: notes_path, local: true do |f| %>
+
+  <p>
+    <%= f.label :title %><br/>
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <%= f.label :body %><br/>
+    <%= f.text_area :body %>
+  </p>
+
+  <p>
+    <%= f.label :hashtag_list %><br/>
+    <%= f.text_area :hashtag_list %>
+  </p>
+
+  <p>
+    <%= f.submit %>
+  </p>
+
+<% end %>
