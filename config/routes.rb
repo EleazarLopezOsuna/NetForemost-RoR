@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :notes, except: %i[show]
   get 'notes/sort/:field' => 'notes#sort', as: 'sort_notes'
   get 'notes/search' => 'notes#search', as: 'search_notes'
+
+  get '*path', to: 'errors#not_found'
 end
