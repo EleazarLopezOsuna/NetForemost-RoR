@@ -8,7 +8,10 @@ module Authentication
 
     def create
       @user = User.new(user_params)
-
+      @user.config = {
+        field: 'id',
+        direction: 'asc'
+      }
       if @user.save
         redirect_to root_path
       else
