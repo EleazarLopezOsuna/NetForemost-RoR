@@ -12,7 +12,6 @@ module Authentication
       if @user.save
         redirect_to root_path
       else
-        p @user.errors
         render :new, stats: :unprocessable_entity
       end
     end

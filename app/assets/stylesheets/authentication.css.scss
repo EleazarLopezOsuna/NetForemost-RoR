@@ -40,13 +40,17 @@ p{
 .myForm{
   padding: 0 25px 0 33px;
 }
+
+.nav-button{
+  background: linear-gradient(135deg, rgb(176, 106, 252) 39%, rgb(198, 147, 255) 100%);
+}
+
 .form-control{
   border: 1px solid #57557A;
   border-radius: 3px;
   background: #212042;
   margin-bottom: 20px;
   letter-spacing: 1px;
-
 }
 .form-control:focus{
   border: 1px solid #57557A;
@@ -106,4 +110,44 @@ small{
 
 .form-control{
   color: white;
+}
+
+.card-container {
+  height: 650px;
+}
+
+.table-scroll tbody {
+  position: absolute;
+  overflow-y: auto;
+  height: 590px;
+}
+
+.table-scroll tr {
+  width: 100%;
+  table-layout: fixed;
+  display: inline-table;
+}
+
+.table-scroll thead > tr > th {
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(176,106,252);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(84, 43, 115);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(218, 218, 218);
+}
+
+.navbar {
+  background-color: rgb(176,106,252);
 }
