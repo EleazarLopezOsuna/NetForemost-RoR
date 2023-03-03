@@ -5,7 +5,7 @@
 # Table name: notes
 #
 #  id         :bigint           not null, primary key
-#  body       :string(255)
+#  body       :text(65535)
 #  title      :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -24,6 +24,13 @@ class Note < ApplicationRecord
   has_many :note_hashtags
   has_many :hashtags, through: :note_hashtags
 
+  scope :with_string, ->(str, user_id) {
+    joins(:hashtags)
+      .where("notes.title LIKE ? OR notes.body LIKE ? OR hashtags.name LIKE ? AND notes.user_id = ?",
+             "%#{str}%", "%#{str}%", "%#{str}%", user_id)
+      .distinct
+  }
+
   def self.order_by_first_hashtag(user_id, direction)
 
     subquery = Note.joins(:hashtags)
@@ -32,7 +39,6 @@ class Note < ApplicationRecord
                    .group('notes.id')
                    .to_sql
 
-    p subquery
 
     joins("INNER JOIN (#{subquery}) sub ON sub.id = notes.id")
       .order("sub.first_hashtag #{direction.upcase}")

@@ -29,16 +29,19 @@ class NotesController < ApplicationController
   def edit; end
 
   def create
-    @note = Note.new(note_params)
+    @note = Note.new(note_params.except(:hashtags))
+    @note.user = @user
+    @note.hashtag_ids = set_hashtag_id_list
 
     respond_to do |format|
       if @note.save
         flash[:success] = 'Note was successfully created.'
-        format.html { redirect_to note_url(@note) }
+        format.html { redirect_to notes_url }
         format.json { render :index, status: :created, location: @note }
       else
+        p @note.errors
         flash[:danger] = 'Note could not be created.'
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :index, status: :unprocessable_entity }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end
     end
@@ -46,7 +49,9 @@ class NotesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @note.update(note_params)
+      if @note.update(note_params.except(:hashtags))
+        @note.hashtag_ids = set_hashtag_id_list
+        @note.save
         flash[:success] = 'Note was successfully updated.'
         format.html { redirect_to notes_url }
         format.json { render :index, status: :ok, location: @note }
@@ -69,6 +74,17 @@ class NotesController < ApplicationController
   end
 
   private
+
+  def set_hashtag_id_list
+    note_params[:hashtags].split(',').map do |hashtag|
+      hashtag_record = Hashtag.find_by name: hashtag.strip.gsub(' ', '_')
+      next hashtag_record.id unless hashtag_record.nil?
+
+      new_hashtag = Hashtag.new name: hashtag.strip.gsub(' ', '_')
+      new_hashtag.save
+      new_hashtag.id
+    end
+  end
 
   def set_note
     @note = Note.find(params[:id])
@@ -99,6 +115,6 @@ class NotesController < ApplicationController
   end
 
   def note_params
-    params.require(:note).permit(:body, :title, :user_id)
+    params.require(:note).permit(:body, :title, :user_id, :hashtags)
   end
 end

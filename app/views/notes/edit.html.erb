@@ -9,7 +9,10 @@
           <%= f.text_field :title, class: "form-control", placeholder: "Title" %>
         </div>
         <div class="form-group">
-          <%= f.text_area :body, class: "form-control", placeholder: "Body", style: "height: 340px; resize: none" %>
+          <%= f.text_area :body, class: "form-control", placeholder: "Body", style: "height: 430px; resize: none" %>
+        </div>
+        <div class="form-group">
+          <%= f.text_field :hashtags, class: "form-control", placeholder: "Hashtags (comma separated)", value: @note.hashtags.map {|hashtag| hashtag.name }.join(', ') %>
         </div>
         <div class="form-group">
           <%= f.submit "Save", class: "btn btn-block btn-primary btn-lg" %>
