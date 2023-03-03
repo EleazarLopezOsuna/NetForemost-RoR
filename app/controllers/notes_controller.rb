@@ -33,10 +33,7 @@ class NotesController < ApplicationController
   def edit; end
 
   def create
-    @note = Note.new(note_params.except(:hashtags))
-    @note.user = @user
-    @note.hashtag_ids = set_hashtag_id_list
-
+    create_note
     respond_to do |format|
       if @note.save
         flash[:success] = 'Note was successfully created.'
@@ -78,6 +75,12 @@ class NotesController < ApplicationController
   end
 
   private
+
+  def create_note
+    @note = Note.new(note_params.except(:hashtags))
+    @note.user = @user
+    @note.hashtag_ids = set_hashtag_id_list
+  end
 
   def set_hashtag_id_list
     note_params[:hashtags].split(',').map do |hashtag|
