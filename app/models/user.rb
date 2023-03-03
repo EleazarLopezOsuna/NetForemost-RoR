@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   def password_check
     return if password.nil?
-    return if password.size > 5 && (user.new_record? || password.changed?)
+    return if password.size > 5 && (new_record? || password.changed?)
 
     errors.add :password, 'Must have at least 6 characters'
   end
