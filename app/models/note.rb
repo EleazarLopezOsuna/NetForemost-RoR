@@ -25,9 +25,9 @@ class Note < ApplicationRecord
   has_many :hashtags, through: :note_hashtags
 
   scope :with_string, lambda { |str, user_id|
+    where_condition = 'notes.title LIKE ? OR notes.body LIKE ? OR hashtags.name LIKE ? AND notes.user_id = ?'
     joins(:hashtags)
-      .where("notes.title LIKE ? OR notes.body LIKE ? OR hashtags.name LIKE ? AND notes.user_id = ?",
-             "%#{str}%", "%#{str}%", "%#{str}%", user_id)
+      .where(where_condition, "%#{str}%", "%#{str}%", "%#{str}%", user_id)
       .distinct
   }
 
@@ -37,10 +37,10 @@ class Note < ApplicationRecord
   end
 
   def self.order_by_first_hashtag(user_id, direction)
-
+    direction_quantity = "notes.id, #{direction == 'asc' ? 'MIN' : 'MAX'}(hashtags.id) AS first_hashtag"
     subquery = Note.joins(:hashtags)
                    .where(user_id:)
-                   .select("notes.id, #{direction == 'asc' ? 'MIN' : 'MAX'}(hashtags.id) AS first_hashtag")
+                   .select(direction_quantity)
                    .group('notes.id')
                    .to_sql
 
