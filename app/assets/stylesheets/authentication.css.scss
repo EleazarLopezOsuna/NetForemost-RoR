@@ -40,13 +40,17 @@ p{
 .myForm{
   padding: 0 25px 0 33px;
 }
+
+.nav-button{
+  background: linear-gradient(135deg, rgb(176, 106, 252) 39%, rgb(198, 147, 255) 100%);
+}
+
 .form-control{
   border: 1px solid #57557A;
   border-radius: 3px;
   background: #212042;
   margin-bottom: 20px;
   letter-spacing: 1px;
-
 }
 .form-control:focus{
   border: 1px solid #57557A;
@@ -142,4 +146,8 @@ small{
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(218, 218, 218);
+}
+
+.navbar {
+  background-color: rgb(176,106,252);
 }

@@ -26,6 +26,10 @@ class NotesController < ApplicationController
     @note = Note.new
   end
 
+  def search
+    @notes = Note.with_string params['value'], @user.id
+  end
+
   def edit; end
 
   def create
@@ -64,7 +68,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note.destroy
+    @note.safe_delete
 
     respond_to do |format|
       flash[:warning] = 'Note was successfully destroyed.'
